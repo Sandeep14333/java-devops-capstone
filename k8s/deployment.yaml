@@ -1,0 +1,26 @@
+
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: capstone-api
+
+spec:
+  replicas: 2
+
+  selector:
+    matchLabels:
+      app: capstone-api
+
+  template:
+    metadata:
+      labels:
+        app: capstone-api
+
+    spec:
+      containers:
+        - name: capstone-api
+          image: 691831300481.dkr.ecr.eu-north-1.amazonaws.com/java-devops-capstone:1.0
+          ports:
+            - containerPort: 8080
+

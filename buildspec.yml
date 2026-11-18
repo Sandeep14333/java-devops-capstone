@@ -1,0 +1,30 @@
+
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      java: corretto21
+
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR
+      - aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin 691831300481.dkr.ecr.eu-north-1.amazonaws.com
+
+  build:
+    commands:
+      - echo Building Java application
+      - mvn clean package
+      - echo Building Docker image
+      - docker build -t java-devops-capstone:latest .
+      - docker tag java-devops-capstone:latest 691831300481.dkr.ecr.eu-north-1.amazonaws.com/java-devops-capstone:latest
+
+  post_build:
+    commands:
+      - echo Pushing Docker image to ECR
+      - docker push 691831300481.dkr.ecr.eu-north-1.amazonaws.com/java-devops-capstone:latest
+
+artifacts:
+  files:
+    - '**/*'
+
